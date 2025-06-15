@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Importar Receitas{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 2rem auto;">
+    <div class="card">
+        <div style="text-align: center;">
+            <i data-lucide="upload-cloud" style="width: 60px; height: 60px; color: var(--color-primary);"></i>
+            <h1>Importar Receitas da Booksy</h1>
+            <p class="page-subtitle" style="margin-bottom: 2rem;">
+                Exporte o relatório .csv da Booksy e faça o upload para sincronizar suas receitas.
+            </p>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" action="{{ url_for('main.upload_csv') }}">
+            <div class="form-group">
+                <label for="arquivo_csv">Selecione o arquivo .csv</label>
+                <input type="file" name="arquivo_csv" id="arquivo_csv" class="form-control" accept=".csv" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Processar Arquivo</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

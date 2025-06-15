@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Financeiro da Clínica{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Ícone do Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Sidebar de Navegação -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-icon">
+                <i data-lucide="wallet"></i>
+            </div>
+            <h2>ClinicFinance</h2>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('main.dashboard') }}">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="{{ url_for('main.gerenciar_despesas') }}">
+                <i data-lucide="arrow-down-circle"></i>
+                <span>Despesas</span>
+            </a>
+            <a href="{{ url_for('main.upload_csv') }}">
+                <i data-lucide="upload-cloud"></i>
+                <span>Importar Receitas</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <main class="main-content">
+        <!-- Bloco para exibir mensagens flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flash-messages">
+                    {% for category, message in messages %}
+                        <li class="flash-{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <!-- O conteúdo da página específica será injetado aqui -->
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- CDN do Chart.js -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        lucide.createIcons(); // Ativa os ícones
+    </script>
+</body>
+</html>
