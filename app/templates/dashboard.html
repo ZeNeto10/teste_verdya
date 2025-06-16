@@ -1,59 +1,49 @@
-{% extends "base.html" %}
-
-{% block title %}Dashboard | Financeiro da Clínica{% endblock %}
+{% extends 'base.html' %}
 
 {% block content %}
-<h1>Dashboard Financeiro</h1>
-<p class="page-subtitle">Visão geral dos resultados dos últimos 30 dias.</p>
+    <h1>Dashboard Financeiro</h1>
+    <p class="page-subtitle">Visão geral dos resultados dos últimos 30 dias.</p>
+    
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+        <div class="card kpi-card">
+            <div class="icon-wrapper bg-success">
+                <i class="fa-solid fa-arrow-up"></i>
+            </div>
+            <div class="kpi-card-info">
+                <h3>Receita Bruta</h3>
+                <p>R$ {{ sumario.total_receitas|round(2) }}</p>
+            </div>
+        </div>
+        <div class="card kpi-card">
+            <div class="icon-wrapper bg-danger">
+                <i class="fa-solid fa-arrow-down"></i>
+            </div>
+            <div class="kpi-card-info">
+                <h3>Despesa Total</h3>
+                <p>R$ {{ sumario.total_despesas|round(2) }}</p>
+            </div>
+        </div>
+        <div class="card kpi-card">
+            <div class="icon-wrapper bg-primary">
+                <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <div class="kpi-card-info">
+                <h3>Lucro Líquido</h3>
+                <p>R$ {{ sumario.lucro|round(2) }}</p>
+            </div>
+        </div>
+    </div>
 
-<!-- Grid de Indicadores Chave (KPIs) -->
-<div class="kpi-grid">
-    <div class="card kpi-card">
-        <div class="icon-wrapper bg-success">
-            <i data-lucide="arrow-up-circle"></i>
+    <!-- Gráficos -->
+    <div class="charts-grid">
+        <div class="card">
+            <h3>Receitas vs Despesas (Diário)</h3>
+            <canvas id="revenueVsExpenseChart" data-chartdata="{{ revenue_expense_data|tojson }}"></canvas>
         </div>
-        <div class="kpi-card-info">
-            <h3>Receita Bruta</h3>
-            <p>R$ {{ sumario.total_receitas|round(2) }}</p>
-        </div>
-    </div>
-    <div class="card kpi-card">
-        <div class="icon-wrapper bg-danger">
-            <i data-lucide="arrow-down-circle"></i>
-        </div>
-        <div class="kpi-card-info">
-            <h3>Despesa Total</h3>
-            <p>R$ {{ sumario.total_despesas|round(2) }}</p>
+        <div class="card">
+            <h3>Composição das Despesas</h3>
+            <canvas id="expensesByCategoryChart" data-chartdata="{{ expenses_by_category_data|tojson }}"></canvas>
         </div>
     </div>
-    <div class="card kpi-card">
-        <div class="icon-wrapper bg-primary">
-            <i data-lucide="scale"></i>
-        </div>
-        <div class="kpi-card-info">
-            <h3>Lucro Líquido</h3>
-            <p>R$ {{ sumario.lucro|round(2) }}</p>
-        </div>
-    </div>
-</div>
-
-<!-- Grid dos Gráficos -->
-<div class="charts-grid">
-    <div class="card">
-        <h3>Receitas vs Despesas (Mensal)</h3>
-        <div style="height: 350px;">
-            <!-- O canvas que o Chart.js usará. Os dados são passados via data-attribute -->
-            <canvas id="revenueVsExpenseChart" 
-                    data-chartdata='{{ revenue_expense_data | tojson | safe }}'></canvas>
-        </div>
-    </div>
-    <div class="card">
-        <h3>Composição das Despesas</h3>
-        <div style="height: 350px;">
-            <canvas id="expensesByCategoryChart"
-                    data-chartdata='{{ expenses_by_category_data | tojson | safe }}'></canvas>
-        </div>
-    </div>
-</div>
-
 {% endblock %}

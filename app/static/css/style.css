@@ -299,7 +299,7 @@ tbody tr:last-child td {
         margin-bottom: 0;
     }
      .sidebar-header h2 {
-        display: none; /* Oculta o texto no mobile */
+         display: none; /* Oculta o texto no mobile */
     }
     .sidebar-nav {
         display: flex;
@@ -307,10 +307,10 @@ tbody tr:last-child td {
         justify-content: space-around;
     }
      .sidebar-nav a {
-        margin-bottom: 0;
+         margin-bottom: 0;
     }
     .sidebar-nav a span {
-        display: none; /* Oculta o texto dos links */
+         display: none; /* Oculta o texto dos links */
     }
     .main-content {
         padding: 1.5rem;

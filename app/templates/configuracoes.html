@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Configurações</h1>
+    <p class="page-subtitle">Gerencie as configurações e dados da sua aplicação.</p>
+
+    <div class="card" style="border-left: 5px solid var(--color-danger);">
+        <div class="card-body">
+            <h5 class="card-title" style="color: var(--color-danger);">Zona de Perigo</h5>
+            <p class="card-text">A ação abaixo é permanente e não pode ser desfeita. Tenha certeza absoluta antes de continuar.</p>
+            <!-- Botão que abre o Modal -->
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmClearDataModal">
+                Limpar Todos os Dados
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal fade" id="confirmClearDataModal" tabindex="-1" aria-labelledby="confirmClearDataModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header" style="border-bottom-color: var(--color-border);">
+            <h1 class="modal-title fs-5" id="confirmClearDataModalLabel">Confirmar Limpeza de Dados</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p><strong>Atenção!</strong> Você está prestes a apagar <strong>TODAS as receitas e despesas</strong> cadastradas no sistema.</p>
+            <p>Esta ação não pode ser desfeita. Deseja continuar?</p>
+          </div>
+          <div class="modal-footer" style="border-top-color: var(--color-border);">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <form action="{{ url_for('main.limpar_dados') }}" method="POST" style="display: inline;">
+              {{ form.hidden_tag() }}
+              <button type="submit" class="btn btn-danger">Sim, apagar tudo</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

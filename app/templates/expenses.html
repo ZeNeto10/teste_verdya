@@ -1,68 +1,62 @@
-{% extends "base.html" %}
-
-{% block title %}Gerenciar Despesas{% endblock %}
+{% extends 'base.html' %}
 
 {% block content %}
-<h1>Gerenciar Despesas</h1>
-<p class="page-subtitle">Adicione novas despesas e visualize o histórico.</p>
+    <h1>Gerenciar Despesas</h1>
+    <p class="page-subtitle">Adicione ou visualize suas despesas.</p>
+    
+    <div class="page-grid">
+        <div class="card">
+            <h2>Nova Despesa</h2>
+            <form method="POST" novalidate>
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.descricao.label }}
+                    {{ form.descricao(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.valor.label }}
+                    {{ form.valor(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.categoria.label }}
+                    {{ form.categoria(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.data_transacao.label }}
+                    {{ form.data_transacao(class="form-control") }}
+                </div>
+                {{ form.submit(class="btn btn-primary mt-3") }}
+            </form>
+        </div>
 
-<div class="page-grid">
-    <!-- Coluna do Formulário -->
-    <div class="card">
-        <h3>Adicionar Nova Despesa</h3>
-        <form method="POST" action="{{ url_for('main.gerenciar_despesas') }}" novalidate>
-            {{ form.hidden_tag() }} <!-- Proteção CSRF -->
-            
-            <div class="form-group">
-                {{ form.descricao.label }}
-                {{ form.descricao(class="form-control") }}
+        <div class="card">
+            <h2>Despesas Recentes</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Descrição</th>
+                            <th>Categoria</th>
+                            <th style="text-align: right;">Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for despesa in despesas %}
+                        <tr>
+                            <td>{{ despesa.data_transacao.strftime('%d/%m/%Y') }}</td>
+                            <td>{{ despesa.descricao }}</td>
+                            <td>{{ despesa.categoria }}</td>
+                            <td class="currency negative" style="text-align: right;">R$ {{ despesa.valor.to_decimal()|round(2) }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" style="text-align: center;">Nenhuma despesa encontrada.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            <div class="form-group">
-                {{ form.valor.label }}
-                {{ form.valor(class="form-control") }}
-            </div>
-            <div class="form-group">
-                {{ form.categoria.label }}
-                {{ form.categoria(class="form-control") }}
-            </div>
-            <div class="form-group">
-                {{ form.data_transacao.label }}
-                {{ form.data_transacao(class="form-control") }}
-            </div>
-            
-            {{ form.submit(class="btn btn-primary") }}
-        </form>
-    </div>
-
-    <!-- Coluna da Tabela -->
-    <div class="card">
-        <h3>Histórico de Despesas</h3>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Descrição</th>
-                        <th>Categoria</th>
-                        <th>Valor</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for despesa in lista_despesas %}
-                    <tr>
-                        <td>{{ despesa.data_transacao.strftime('%d/%m/%Y') }}</td>
-                        <td>{{ despesa.descricao }}</td>
-                        <td>{{ despesa.categoria }}</td>
-                        <td class="currency negative">- R$ {{ "%.2f"|format(despesa.valor) }}</td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="4" style="text-align: center; padding: 2rem;">Nenhuma despesa registrada.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
         </div>
     </div>
-</div>
 {% endblock %}

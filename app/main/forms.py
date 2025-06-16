@@ -1,46 +1,50 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FloatField, DateField, SelectField, SubmitField
-from wtforms.validators import DataRequired, Length, NumberRange
+from flask_wtf.file import FileField, FileAllowed, FileRequired
+from wtforms import StringField, SubmitField, SelectField, FloatField, DateField
+from wtforms.validators import DataRequired, NumberRange, InputRequired
+from datetime import date
+
+class CSVUploadForm(FlaskForm):
+    """Formulário para upload de arquivo CSV de Receitas."""
+    arquivo_csv = FileField(
+        'Selecione o arquivo CSV de Receitas', 
+        validators=[
+            FileRequired(message='Nenhum arquivo selecionado.'),
+            FileAllowed(['csv'], 'Apenas arquivos .csv são permitidos!')
+        ]
+    )
+    submit = SubmitField('Enviar Arquivo')
+
+class CSVDespesaUploadForm(FlaskForm):
+    """Formulário para upload de arquivo CSV de Despesas."""
+    arquivo_csv = FileField(
+        'Selecione o arquivo CSV de Despesas', 
+        validators=[
+            FileRequired(message='Nenhum arquivo selecionado.'),
+            FileAllowed(['csv'], 'Apenas arquivos .csv são permitidos!')
+        ]
+    )
+    submit = SubmitField('Enviar Arquivo')
 
 class DespesaForm(FlaskForm):
-    """
-    Formulário para o usuário registrar uma nova despesa.
-    Cada atributo da classe representa um campo no formulário HTML.
-    """
-    descricao = StringField(
-        'Descrição da Despesa', 
-        validators=[
-            DataRequired(message="Este campo é obrigatório."), 
-            Length(min=3, max=200, message="A descrição deve ter entre 3 e 200 caracteres.")
-        ]
-    )
-    
-    valor = FloatField(
-        'Valor (R$)', 
-        validators=[
-            DataRequired(message="Este campo é obrigatório."),
-            NumberRange(min=0.01, message="O valor deve ser positivo.")
-        ]
-    )
-    
-    categoria = SelectField(
-        'Categoria', 
-        choices=[
-            ('Custos Fixos', 'Custos Fixos (Aluguel, Salários)'),
-            ('Materiais', 'Materiais e Suprimentos'),
-            ('Marketing', 'Marketing e Publicidade'),
-            ('Impostos', 'Impostos e Taxas'),
-            ('Manutenção', 'Manutenção e Equipamentos'),
-            ('Outros', 'Outros')
-        ], 
-        validators=[DataRequired(message="Selecione uma categoria.")]
-    )
-    
-
-    data_transacao = DateField(
-        'Data da Despesa', 
-        format='%Y-%m-%d', 
-        validators=[DataRequired(message="A data é obrigatória.")]
-    )
-    
+    """Formulário para adicionar ou editar uma despesa manualmente."""
+    descricao = StringField('Descrição', validators=[DataRequired(message="A descrição é obrigatória.")])
+    valor = FloatField('Valor', validators=[InputRequired(message="O valor é obrigatório."), NumberRange(min=0.01, message="O valor deve ser positivo.")])
+    categoria = SelectField('Categoria', choices=[
+        ('Outros', 'Outros'),
+        ('Alimentação', 'Alimentação'),
+        ('Moradia', 'Moradia'),
+        ('Transporte', 'Transporte'),
+        ('Saúde', 'Saúde'),
+        ('Lazer', 'Lazer'),
+        ('Educação', 'Educação'),
+    ], validators=[DataRequired(message="A categoria é obrigatória.")])
+    data_transacao = DateField('Data da Transação', format='%Y-%m-%d', default=date.today, validators=[DataRequired(message="A data é obrigatória.")])
     submit = SubmitField('Adicionar Despesa')
+
+class EmptyForm(FlaskForm):
+    """
+    Um formulário vazio usado para fornecer proteção CSRF a ações que
+    não precisam de campos, como botões de exclusão.
+    """
+    pass
